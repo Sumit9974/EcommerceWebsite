@@ -3,7 +3,7 @@ const nav = document.getElementById("navbar");
 const navClose = document.getElementById("close");
 
 if (bar) {
-  bar.addEventListener("click", () => {
+  bar.addEventListener("click", () => { 
     nav.classList.add("active");
   });
 }
@@ -13,4 +13,3 @@ if (navClose) {
     nav.classList.remove("active");
   });
 }
-
