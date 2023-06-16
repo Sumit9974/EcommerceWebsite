@@ -22,13 +22,13 @@ function renderCartProduct(cartItemsStorage) {
   return (cartRenderTable.innerHTML = cartItemsStorage
     .map((item) => {
       return `
-          <tr id="${item.id} class="table-row">
+          <tr id="${item.id}" class="table-rows">
           <td><i class="far fa-times-circle cart-item-remove" data-cart-remove-btn></i></td>
           <td><img src="${item.img}" alt=""></td>
           <td>${item.name}</td>
           <td>$${item.price}</td>
           <td><input type="number" class="cart-item-quantity" value="1"></td>
-          <td>$${item.price}</td>
+          <td class="cart-price">$${item.price}</td>
           </tr>
           `;
     })
@@ -36,7 +36,44 @@ function renderCartProduct(cartItemsStorage) {
 }
 renderCartProduct(cartItemsStorage);
 
+//!======================================== Default Cart Total FUNCTIONALY===================================
+
+function defaultCartTotal() {
+  let defautTotal = 0;
+  const cartTableBody = document.querySelector(".cart-table-body");
+  const rows = cartTableBody.querySelectorAll(".table-rows");
+  rows.forEach((row) => {
+    const price = +row.lastElementChild.innerText.substring(1);
+    defautTotal += price;
+    // row.lastElementChild;
+    // console.log(row.lastElementChild);
+  });
+  return defautTotal;
+}
+const defaulCartTotalPrice = defaultCartTotal();
+
 //!======================================== CART  Quantity Change FUNCTIONALY===================================
+function getQuantity() {
+  const cartTableBody = document.querySelector(".cart-table-body");
+  const items = cartTableBody.querySelectorAll(".cart-item-quantity");
+  items.forEach((item) => {
+    item.addEventListener("change", (event) => {
+      const currentItem = event.currentTarget;
+      const orignalPrice = currentItem.parentElement.previousElementSibling;
+      const subTotalPrice = currentItem.parentElement.nextElementSibling;
+      const newPrice = parseInt(orignalPrice.innerText.substring(1));
+
+      if (currentItem.value < 1) {
+        currentItem.value = 1;
+      }
+      const subTotal = orignalPrice * +currentItem.value;
+      subTotalPrice.innerText = `$${newPrice * +currentItem.value}`;
+      // selectedItemPrice.innerText = `$${selectedItemPrice.innerText * currentItem.value}`;
+    });
+  });
+}
+getQuantity();
+// console.log(quantity);
 
 //!========================================REMOVE ITEM FROM CART FUNCTIONALY===================================
 const removeBtns = document.querySelectorAll(".cart-item-remove");
@@ -61,18 +98,23 @@ function deleteItemFromCart(itemRow) {
 }
 
 //!======================================== CART Sub-Totall FUNCTIONALY===================================
-const cartItemQuantity = document.querySelectorAll(".cart-item-quantity");
 
-function getSubTotal() {
-  let subTotal = 0;
-  cartItemQuantity.forEach((input) => {
-    const subtotal = cartItemsStorage.map((item) => {
-      subTotal += item.price;
-    });
-  });
-  console.log("Subtotal of Products are : " + subTotal);
-  return subTotal;
-}
+// let totalPrice = 0;
+// function getTotalPrice() {
+//   const cartTableBody = document.querySelector(".cart-table-body");
+//   const items = cartTableBody.querySelectorAll(".cart-item-quantity");
+//   items.forEach((item) => {
+//     item.addEventListener("change", (event) => {
+//       const currentItem = event.currentTarget;
+//       const subTotalPrice = currentItem.parentElement.nextElementSibling;
+//       totalPrice += +subTotalPrice.innerText.substring(1);
+
+//       console.log(totalPrice);
+//     });
+//   });
+// }
+// const finalPrice = getTotalPrice();
+
 
 //!======================================== CART Totals FUNCTIONALY===================================
 
@@ -83,7 +125,7 @@ cartSubTotal.innerHTML = `
 <table>
     <tr class="sub-total">
         <td>Cart Subtotal</td>
-        <td>$ ${getSubTotal()}</td>
+        <td>$${defaulCartTotalPrice}</td>
     </tr>
     <tr class="cart-shipping">
         <td>Shipping</td>
@@ -91,7 +133,7 @@ cartSubTotal.innerHTML = `
     </tr>
     <tr class="cart-total">
         <td><strong>Total</strong></td>
-        <td><strong>$ ${getSubTotal()}</strong></td>
+        <td><strong>$${defaulCartTotalPrice}</strong></td>
     </tr>
 </table>
 <button class="normal">Proceed to checkout</button>
