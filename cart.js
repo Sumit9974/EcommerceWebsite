@@ -22,22 +22,23 @@ function renderCartProduct(cartItemsStorage) {
   return (cartRenderTable.innerHTML = cartItemsStorage
     .map((item) => {
       return `
-          <tr id="${item.id}">
+          <tr id="${item.id} class="table-row">
           <td><i class="far fa-times-circle cart-item-remove" data-cart-remove-btn></i></td>
           <td><img src="${item.img}" alt=""></td>
           <td>${item.name}</td>
           <td>$${item.price}</td>
-          <td><input type="number" value="1"></td>
+          <td><input type="number" class="cart-item-quantity" value="1"></td>
           <td>$${item.price}</td>
-      </tr>
+          </tr>
           `;
     })
     .join(""));
 }
 renderCartProduct(cartItemsStorage);
 
-//!========================================REMOVE ITEM FROM CART FUNCTIONALY===================================
+//!======================================== CART  Quantity Change FUNCTIONALY===================================
 
+//!========================================REMOVE ITEM FROM CART FUNCTIONALY===================================
 const removeBtns = document.querySelectorAll(".cart-item-remove");
 
 for (let i = 0; i < removeBtns.length; i++) {
@@ -58,3 +59,40 @@ function deleteItemFromCart(itemRow) {
   // cartItemsStorage = JSON.parse(localStorage.getItem("cartProducts"));
   window.location.reload();
 }
+
+//!======================================== CART Sub-Totall FUNCTIONALY===================================
+const cartItemQuantity = document.querySelectorAll(".cart-item-quantity");
+
+function getSubTotal() {
+  let subTotal = 0;
+  cartItemQuantity.forEach((input) => {
+    const subtotal = cartItemsStorage.map((item) => {
+      subTotal += item.price;
+    });
+  });
+  console.log("Subtotal of Products are : " + subTotal);
+  return subTotal;
+}
+
+//!======================================== CART Totals FUNCTIONALY===================================
+
+const cartSubTotal = document.getElementById("subtotal");
+
+cartSubTotal.innerHTML = `
+<h3>Cart Totals</h3>
+<table>
+    <tr class="sub-total">
+        <td>Cart Subtotal</td>
+        <td>$ ${getSubTotal()}</td>
+    </tr>
+    <tr class="cart-shipping">
+        <td>Shipping</td>
+        <td>Free</td>
+    </tr>
+    <tr class="cart-total">
+        <td><strong>Total</strong></td>
+        <td><strong>$ ${getSubTotal()}</strong></td>
+    </tr>
+</table>
+<button class="normal">Proceed to checkout</button>
+`;
