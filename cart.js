@@ -16,9 +16,9 @@ function productIdSearch(items, id) {
 }
 const cartProduct = productIdSearch(productDetails, productId);
 // cartItems.push(cartProduct);
-// let cartItemsStorage;/
+// let cartItemsStorage;
 let cartItemsStorage = JSON.parse(localStorage.getItem("cartProducts"));
-function renderCartProduct() {
+function renderCartProduct(cartItemsStorage) {
   return (cartRenderTable.innerHTML = cartItemsStorage
     .map((item) => {
       return `
@@ -34,41 +34,27 @@ function renderCartProduct() {
     })
     .join(""));
 }
-renderCartProduct();
+renderCartProduct(cartItemsStorage);
 
-// // function cartRemoveProductButton() {
-// const removeBtns = document.querySelectorAll(".cart-item-remove");
-// //   console.log("array" + removeBtns);
-// removeBtns.forEach((btn) => {
-//   btn.addEventListener("click", (event) => {
-//     const currentbtn = event.currentTarget;
-//     const currentRow = currentbtn.parentElement.parentElement;
-//     deleteCartDetails(currentRow);
-// });
-// });
+//!========================================REMOVE ITEM FROM CART FUNCTIONALY===================================
 
-// function deleteCartDetails(currentRow) {
-//   const currentRowId = currentRow.id;
-//   console.log(currentRow);
-//   currentRow.addEventListener("click", () => {
-//     const index = cartItemsStorage.findIndex((item, index) => {
-//       return item.id === currentRowId;
-//     });
+const removeBtns = document.querySelectorAll(".cart-item-remove");
 
-//     //   console.log(index);
+for (let i = 0; i < removeBtns.length; i++) {
+  removeBtns[i].addEventListener("click", (event) => {
+    const currentItem = event.currentTarget;
+    const itemRow = currentItem.parentElement.parentElement;
+    deleteItemFromCart(itemRow);
+  });
+}
 
-//     if (localStorage.getItem("cartProducts") == null) {
-//       cartItemsStorage = [];
-//     } else {
-//       cartItemsStorage = JSON.parse(localStorage.getItem("cartProducts"));
-//     }
-//     cartItemsStorage.splice(index, 1);
-//     localStorage.setItem("cartProducts", JSON.stringify(cartItemsStorage));
-//     cartItemsStorage = JSON.parse(localStorage.getItem("cartProducts"));
-//     renderCartProduct();
-//   });
-// }
-
-// cartRemoveProductButton();
-
-// console.log(cartItems);
+function deleteItemFromCart(itemRow) {
+  const index = cartItemsStorage.findIndex((items, index) => {
+    return items.id === itemRow.id;
+  });
+  console.log("Item Selected on Index : " + index);
+  cartItemsStorage.splice(index, 1);
+  localStorage.setItem("cartProducts", JSON.stringify(cartItemsStorage));
+  // cartItemsStorage = JSON.parse(localStorage.getItem("cartProducts"));
+  window.location.reload();
+}
