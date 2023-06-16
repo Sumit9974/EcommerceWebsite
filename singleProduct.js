@@ -25,7 +25,7 @@ function productIdSearch(items, id) {
 }
 
 const product = productIdSearch(productDetails, productId);
-console.log(product);
+// console.log(product);
 
 imageDiv.innerHTML = `
 <img src="${product.img}" width="100%" id="MainImg" alt="">
@@ -57,7 +57,7 @@ detailsDiv.innerHTML = `
     <option>Large</option>
 </select>
 <input type="number" value="1">
-<button class="normal">Add To Cart</button>
+<button class="normal add-to-cart">Add To Cart</button>
 <h4>Product Details : </h4>
 <span>
 <strong>Name :</strong> ${product.name}<br>
@@ -69,3 +69,22 @@ Net Quantity (N) : 1 <br>
 <strong>XL</strong> (Bust Size : 40 in, Length Size: 25 in)<br>
 Country of Origin : India</span>
 `;
+let cartItemsStorage;
+
+if (localStorage.getItem("cartProducts") == null) {
+  cartItemsStorage = [];
+} else {
+  cartItemsStorage = JSON.parse(localStorage.getItem("cartProducts"));
+}
+
+function addToCartFunction() {
+  const addToCartBtn = document.querySelector(".add-to-cart");
+  addToCartBtn.addEventListener("click", () => {
+    cartItemsStorage.push(product);
+    localStorage.setItem("cartProducts", JSON.stringify(cartItemsStorage));
+    console.log(cartItemsStorage);
+    window.location.href = "cart.html?id=" + productId;
+  });
+}
+
+addToCartFunction();

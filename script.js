@@ -58,7 +58,7 @@ const renderProduct = () => {
       <span class="pro-brand">${brand}</span>
       <h5 class="pro-title">${name}</h5>
                 <div class="star">
-                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i> 
                 <i class="fas fa-star"></i> 
                 <i class="fas fa-star"></i>
                 <i class="fas fa-star"></i>
